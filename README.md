@@ -1,1 +1,1 @@
-# programowanie_aplikacji_mobilinych
+# programowanie_aplikacji_mobilnych

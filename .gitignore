@@ -31,3 +31,14 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+
+# My ignores
+my_first_application/.gradle
+my_first_application/.idea
+my_first_application/*.iml
+my_first_application/.DS_Store
+my_first_application/build
+my_first_application/captures
+my_first_application/local.properties
+

@@ -2,8 +2,48 @@
 
 
 # My ignores
+*.zip
 my_first_application/.gradle
 my_first_application/.idea
+
+# Pliki tymczasowe
+LabA1/.gradle/
+LabA1/build/
+LabA1/local.properties
+
+# Pliki konfiguracyjne IDE
+LabA1/.idea/
+
+# Pliki binarne
+LabA1/app/build/
+
+# Pliki generowane
+LabA1/*.iml
+LabA1/*.log
+
+# Pliki pomocnicze
+LabA1/.DS_Store
+
+# Pliki testowe
+LabA1/*.test.kts
+LabA1/*.test.java
+
+# Pliki specyficzne dla platformy
+LabA1**/windows/*
+LabA1**/mac/*
+
+# Pliki bibliotek
+LabA1**/libs/*
+
+# Inne pliki, które chcesz zignorować
+# ...
+
+# Pliki konfiguracyjne Git
+!.gitignore
+
+# Pliki README i LICENSE
+README.md
+LICENSE
 
 
 

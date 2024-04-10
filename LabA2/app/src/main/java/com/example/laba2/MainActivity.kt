@@ -1,30 +1,55 @@
 package com.example.laba2
 
+import android.media.Rating
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.location.LocationRequestCompat.Quality
 
 class MainActivity : AppCompatActivity() {
-    lateinit var editNum1:EditText;
-    lateinit var editNum2:EditText;
-    lateinit var textResult: TextView;
+    lateinit var editPrice: EditText
+    lateinit var editTip: EditText
+    lateinit var textResult: TextView
+    lateinit var foodRatingBar: RatingBar
+    lateinit var serviceRatingBar: RatingBar
+    lateinit var calculateButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        foodRatingBar = findViewById<RatingBar>(R.id.foodRatingBar)
+        serviceRatingBar = findViewById<RatingBar>(R.id.serviceRatingBar)
+        editPrice = findViewById(R.id.editPrice)
+        editTip = findViewById(R.id.editTip)
+        textResult = findViewById(R.id.textResult)
+        calculateButton = findViewById(R.id.calculateButton)
+
+        calculateButton.setOnClickListener {
+            val foodPrice = editPrice.text.toString().toDouble()
+            val tipPercentage = editTip.text.toString().toDouble()
+            val serviceQuality = serviceRatingBar.rating.toDouble()
+
+            if(foodPrice != null && tipPercentage != null){
+                val tipAmount = calculateTip(foodPrice, tipPercentage, serviceQuality)
+                Toast.makeText(this@MainActivity, "Tip value $tipAmount", Toast.LENGTH_SHORT).show()
+                calculateFinalPrice(foodPrice, tipAmount)
+            }
+        }
     }
 
-    fun addNumbers(view: View?) {
-        editNum1 = findViewById(R.id.editNum1);
-        editNum2 = findViewById(R.id.editNum2);
-        textResult = findViewById(R.id.textResult);
-        val num1 = editNum1.text.toString().toDouble();
-        val num2 = editNum2.text.toString().toDouble();
-        val result = num1 + num2;
-        textResult.text = java.lang.Double.toString(result);
-
+    fun calculateTip(foodPrice: Double, tipPercentage: Double, serviceQuality: Double): Double{
+        val tipValue = foodPrice * (tipPercentage + (serviceQuality - 3) * 2) / 100 // One star -4%, Two stars -2%, Three stars 0%, Four stars +2%, Five stars +4%
+        return tipValue
+    }
+    fun calculateFinalPrice(foodPrice: Double, tipValue: Double) {
+        val finalPrice = foodPrice + tipValue
+        textResult.text = java.lang.Double.toString(finalPrice)
     }
 }

@@ -3,6 +3,7 @@
 
 # My ignores
 *.zip
+*.rar
 my_first_application/.gradle
 my_first_application/.idea
 
@@ -44,6 +45,8 @@ LabA1**/libs/*
 # Pliki README i LICENSE
 README.md
 LICENSE
+
+
 
 
 

@@ -14,6 +14,7 @@ import androidx.core.location.LocationRequestCompat.Quality
 class MainActivity : AppCompatActivity() {
     lateinit var editPrice: EditText
     lateinit var editTip: EditText
+    lateinit var textTip: TextView
     lateinit var textResult: TextView
     lateinit var foodRatingBar: RatingBar
     lateinit var serviceRatingBar: RatingBar
@@ -29,18 +30,25 @@ class MainActivity : AppCompatActivity() {
         editPrice = findViewById(R.id.editPrice)
         editTip = findViewById(R.id.editTip)
         textResult = findViewById(R.id.textResult)
+        textTip = findViewById(R.id.textTip)
         calculateButton = findViewById(R.id.calculateButton)
 
         calculateButton.setOnClickListener {
-            val foodPrice = editPrice.text.toString().toDouble()
-            val tipPercentage = editTip.text.toString().toDouble()
-            val serviceQuality = serviceRatingBar.rating.toDouble()
-
-            if(foodPrice != null && tipPercentage != null){
-                val tipAmount = calculateTip(foodPrice, tipPercentage, serviceQuality)
-                Toast.makeText(this@MainActivity, "Tip value $tipAmount", Toast.LENGTH_SHORT).show()
-                calculateFinalPrice(foodPrice, tipAmount)
+            if(editPrice.text.toString() != "" && editTip.text.toString() != "" && serviceRatingBar.rating.toString() != ""){
+                val foodPrice = editPrice.text.toString().toDouble()
+                val tipPercentage = editTip.text.toString().toDouble()
+                val serviceQuality = serviceRatingBar.rating.toDouble()
+                if(foodPrice != null && tipPercentage != null && serviceQuality != null){
+                    val tipAmount = calculateTip(foodPrice, tipPercentage, serviceQuality)
+                    calculateFinalPrice(foodPrice, tipAmount)
+                }
             }
+            else {
+                Toast.makeText(this@MainActivity, "Wrong data input! Check the values.", Toast.LENGTH_SHORT).show()
+            }
+
+
+
         }
     }
 
@@ -51,5 +59,7 @@ class MainActivity : AppCompatActivity() {
     fun calculateFinalPrice(foodPrice: Double, tipValue: Double) {
         val finalPrice = foodPrice + tipValue
         textResult.text = java.lang.Double.toString(finalPrice)
+        textTip.text = java.lang.Double.toString(tipValue)
+
     }
 }

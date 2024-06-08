@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,15 +29,18 @@ class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegoSetViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.lego_set_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.lego_tiles, parent, false)
         return LegoSetViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: LegoSetViewHolder, position: Int) {
         val legoSet = legoSets[position]
         holder.textView.text = legoSet.name
-        // Use a library like Glide or Picasso to load the image from the URL
-        // Glide.with(holder.imageView.context).load(legoSet.set_img_url).into(holder.imageView)
+
+        Glide.with(holder.imageView.context)
+            .load(legoSet.set_img_url)
+            .fitCenter()
+            .into(holder.imageView)
     }
 
     override fun getItemCount() = legoSets.size

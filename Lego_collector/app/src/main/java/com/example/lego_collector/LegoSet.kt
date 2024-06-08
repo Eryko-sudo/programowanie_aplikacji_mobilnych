@@ -1,5 +1,6 @@
 package com.example.lego_collector
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ data class LegoSet(
     val set_img_url: String,
     val set_url: String,
     val last_modified_dt: String
-)
+) : java.io.Serializable
 
 class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter<LegoSetAdapter.LegoSetViewHolder>() {
 
@@ -41,6 +42,14 @@ class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter
             .load(legoSet.set_img_url)
             .fitCenter()
             .into(holder.imageView)
+
+        // Set click listener
+        holder.itemView.setOnClickListener {
+            // Start new Activity or Fragment to display LegoSet details
+            val intent = Intent(holder.itemView.context, LegoSetDetailActivity::class.java)
+            intent.putExtra("legoSet", legoSet)
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = legoSets.size

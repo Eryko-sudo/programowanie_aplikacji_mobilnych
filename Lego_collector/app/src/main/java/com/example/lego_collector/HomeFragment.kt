@@ -1,10 +1,12 @@
 package com.example.lego_collector
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -47,6 +49,10 @@ class HomeFragment : Fragment() {
                         recyclerView.adapter = LegoSetAdapter(legoSets)
                     }
                 }
+                // Hide keyboard
+                val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+
                 return true
             }
 

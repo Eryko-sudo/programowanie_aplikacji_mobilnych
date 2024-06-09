@@ -30,16 +30,38 @@ class LegoSetDetailActivity : AppCompatActivity() {
             .load(legoSet.set_img_url)
             .into(binding.imageView)
 
-        binding.addToCollectionButton.setOnClickListener {
-            // Add the LegoSet to the database
-            lifecycleScope.launch(Dispatchers.IO) {
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java, "database-name"
-                ).fallbackToDestructiveMigration()
-                    .build()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "database-name"
+            ).fallbackToDestructiveMigration()
+                .build()
 
-                db.legoSetDao().insertAll(legoSet)
+            val existingLegoSet = db.legoSetDao().getLegoSet(legoSet.set_num)
+
+            withContext(Dispatchers.Main) {
+                if (existingLegoSet != null) {
+                    binding.addToCollectionButton.text = "In collection"
+                    binding.addToCollectionButton.setOnClickListener {
+                        // Delete the LegoSet from the database
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            db.legoSetDao().delete(legoSet)
+                            withContext(Dispatchers.Main) {
+                                binding.addToCollectionButton.text = "Add to collection"
+                            }
+                        }
+                    }
+                } else {
+                    binding.addToCollectionButton.setOnClickListener {
+                        // Add the LegoSet to the database
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            db.legoSetDao().insertAll(legoSet)
+                            withContext(Dispatchers.Main) {
+                                binding.addToCollectionButton.text = "In collection"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

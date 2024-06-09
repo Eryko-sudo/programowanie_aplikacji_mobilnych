@@ -42,7 +42,8 @@ class CollectionFragment : Fragment() {
             val db = Room.databaseBuilder(
                 requireContext(),
                 AppDatabase::class.java, "database-name"
-            ).build()
+            ).fallbackToDestructiveMigration()
+                .build()
 
             val legoSets = withContext(Dispatchers.IO) { db.legoSetDao().getAll() }
 

@@ -9,10 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.serialization.Serializable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 @Serializable
 data class LegoSet(
-    val set_num: String,
+    @PrimaryKey val set_num: String,
     val name: String,
     val year: Int,
     val theme_id: Int,
@@ -22,7 +25,7 @@ data class LegoSet(
     val last_modified_dt: String
 ) : java.io.Serializable
 
-class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter<LegoSetAdapter.LegoSetViewHolder>() {
+class LegoSetAdapter(private var legoSets: List<LegoSet>) : RecyclerView.Adapter<LegoSetAdapter.LegoSetViewHolder>() {
 
     class LegoSetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.imageView)
@@ -45,7 +48,6 @@ class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter
 
         // Set click listener
         holder.itemView.setOnClickListener {
-            // Start new Activity or Fragment to display LegoSet details
             val intent = Intent(holder.itemView.context, LegoSetDetailActivity::class.java)
             intent.putExtra("legoSet", legoSet)
             holder.itemView.context.startActivity(intent)
@@ -53,4 +55,9 @@ class LegoSetAdapter(private val legoSets: List<LegoSet>) : RecyclerView.Adapter
     }
 
     override fun getItemCount() = legoSets.size
+
+    fun updateLegoSets(newLegoSets: List<LegoSet>) {
+        legoSets = newLegoSets
+        notifyDataSetChanged()
+    }
 }

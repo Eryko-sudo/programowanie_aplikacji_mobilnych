@@ -43,6 +43,15 @@
             android:textSize="18sp"
             android:layout_marginTop="8dp" />
 
+
+        <Button
+            android:id="@+id/addToCollectionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Collection"
+            android:layout_marginTop="8dp" />
+
+
     </LinearLayout>
 
 </ScrollView>

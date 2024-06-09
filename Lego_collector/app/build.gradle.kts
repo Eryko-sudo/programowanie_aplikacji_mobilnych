@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("org.jetbrains.kotlin.plugin.serialization") version "1.5.10"
+    id("org.jetbrains.kotlin.kapt")
 
 }
 
@@ -54,5 +55,8 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    implementation ("androidx.room:room-runtime:2.4.1")
+    kapt ("androidx.room:room-compiler:2.4.1")
 
 }

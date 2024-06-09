@@ -2,8 +2,13 @@ package com.example.lego_collector
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.lego_collector.databinding.ActivityLegoSetDetailBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LegoSetDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLegoSetDetailBinding
@@ -24,5 +29,17 @@ class LegoSetDetailActivity : AppCompatActivity() {
         Glide.with(this)
             .load(legoSet.set_img_url)
             .into(binding.imageView)
+
+        binding.addToCollectionButton.setOnClickListener {
+            // Add the LegoSet to the database
+            lifecycleScope.launch(Dispatchers.IO) {
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java, "database-name"
+                ).build()
+
+                db.legoSetDao().insertAll(legoSet)
+            }
+        }
     }
 }

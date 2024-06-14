@@ -1,12 +1,13 @@
 package com.example.lego_collector
 
 import android.app.Activity
+import android.app.Dialog
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -115,8 +116,33 @@ class CameraFragment : Fragment() {
                 scaleType = ImageView.ScaleType.CENTER_CROP
             }
             imageView.setImageURI(images[position])
+
+            // Add click listener to preview image
+            imageView.setOnClickListener {
+                showImagePreview(images[position], position)
+            }
+
             return imageView
         }
+    }
+
+    private fun showImagePreview(imageUri: Uri, position: Int) {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_image_preview)
+        val imageView = dialog.findViewById<ImageView>(R.id.imagePreview)
+        imageView.setImageURI(imageUri)
+        dialog.findViewById<Button>(R.id.deleteButton).setOnClickListener {
+            deleteImage(imageUri, position)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun deleteImage(imageUri: Uri, position: Int) {
+        requireContext().contentResolver.delete(imageUri, null, null)
+        images.removeAt(position)
+        imageAdapter.notifyDataSetChanged()
+        Log.d("CameraFragment", "Image deleted")
     }
 
     private fun loadImagesFromGallery() {

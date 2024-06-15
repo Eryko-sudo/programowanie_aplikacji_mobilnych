@@ -29,25 +29,24 @@ data class ApiResponse(
     val previous: String?,
     val results: List<LegoSet>
 )
-
 class HomeFragment : Fragment() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        val searchView = view.findViewById<SearchView>(R.id.searchView)
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerView)
+        searchView = view.findViewById(R.id.searchView)
+        recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(context, 2) // 2 columns
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val response = sendApiRequest(query)
-                        val legoSets = parseResponse(response) // Implement this function to parse the JSON response into a List<LegoSet>
-                        recyclerView.adapter = LegoSetAdapter(legoSets)
-                    }
+                    performSearch(query)
                 }
                 // Hide keyboard
                 val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -61,7 +60,18 @@ class HomeFragment : Fragment() {
             }
         })
 
+        // Automatically search for "Star Wars" when the app opens
+        searchView.setQuery("Starfighter", true)
+
         return view
+    }
+
+    private fun performSearch(query: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = sendApiRequest(query)
+            val legoSets = parseResponse(response)
+            recyclerView.adapter = LegoSetAdapter(legoSets)
+        }
     }
 
     private suspend fun sendApiRequest(query: String): String? = withContext(Dispatchers.IO) {
@@ -77,6 +87,7 @@ class HomeFragment : Fragment() {
             return@withContext response.body?.string()
         }
     }
+
     private fun parseResponse(response: String?): List<LegoSet> {
         val apiResponse = Json { ignoreUnknownKeys = true }.decodeFromString<ApiResponse>(response!!)
         return apiResponse.results
